@@ -1,0 +1,38 @@
+# React frontend
+node_modules/
+build/
+dist/
+*.log
+.env    # Exclude sensitive environment variables
+.env.*
+
+# Compiled JavaScript files (if using TypeScript or Babel)
+*.js.map
+*.tsbuildinfo
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage reports (if using testing)
+coverage/
+
+# Production build files (if generated manually)
+out/
