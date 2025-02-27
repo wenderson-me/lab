@@ -1,20 +1,19 @@
-// frontend/src/pages/Signup/Signup.js
+// frontend/src/pages/Login/Login.js
 import NavBar from "../../components/NavBar/Navbar";
 import Passwordinput from "../../components/Input/Passwordinput";
 import { validateEmail } from "../../utils/helper";
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { apiRequest } from "../../utils/api";
-import { Loader } from 'react-feather'; // Instale com: npm install react-feather
+import { Loader } from 'react-feather';
 
-const Signup = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       setError("Please enter a valid email address");
@@ -24,24 +23,16 @@ const Signup = () => {
       setError("Password cannot be empty");
       return;
     }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-    setLoading(true); // Inicia o loading
+    setLoading(true);
     try {
-      const data = await apiRequest('/auth/signup', 'POST', { email, password });
+      const data = await apiRequest('/auth/login', 'POST', { email, password });
       localStorage.setItem('token', data.token);
       setError(null);
       window.location.href = '/home';
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false); // Finaliza o loading
+      setLoading(false);
     }
   };
 
@@ -50,8 +41,8 @@ const Signup = () => {
       <NavBar />
       <div className="min-h-screen bg-black flex justify-center items-center p-4">
         <div className="w-full max-w-md bg-gray-950 rounded-xl shadow-lg p-6 border border-purple-800">
-          <form onSubmit={handleSignup}>
-            <h4 className="text-2xl mb-6 text-white text-center font-bold">Sign Up</h4>
+          <form onSubmit={handleLogin}>
+            <h4 className="text-2xl mb-6 text-white text-center font-bold">Login</h4>
 
             <input
               type="text"
@@ -62,17 +53,9 @@ const Signup = () => {
             />
 
             <Passwordinput
-              placeholder="Password"
-              className="w-full p-3 mb-4 bg-gray-900 text-white rounded-lg border border-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-600"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <Passwordinput
-              placeholder="Confirm Password"
               className="w-full p-3 mb-4 bg-gray-900 text-white rounded-lg border border-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-600"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
             {error && <p className="text-red-400 text-sm pb-2">{error}</p>}
@@ -85,14 +68,14 @@ const Signup = () => {
               {loading ? (
                 <Loader size={20} className="animate-spin mr-2" />
               ) : (
-                "Create Account"
+                "Login"
               )}
             </button>
 
             <p className="text-sm text-center mt-4 text-gray-400">
-              Already have an account?{" "}
-              <Link to="/login" className="font-medium text-white underline hover:text-purple-400">
-                Login Here
+              Not registered yet?{" "}
+              <Link to="/signup" className="font-medium text-white underline hover:text-purple-400">
+                Create an Account
               </Link>
             </p>
           </form>
@@ -102,4 +85,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

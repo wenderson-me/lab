@@ -1,8 +1,9 @@
 // frontend/src/components/NavBar/Navbar.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { apiRequest } from '../../utils/api';
-import { Menu, X, Settings, User, Archive, FileText, LogOut } from 'react-feather';
+import Logo from '../Logo/Logo';
+import { Menu, X, Settings, User, FileText, Archive, LogOut } from 'react-feather';
 
 const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
   const navigate = useNavigate();
@@ -11,11 +12,6 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
-  const isHomePage = location.pathname === '/home';
-
-  // Handle window resize for responsive layout
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -33,6 +29,10 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
+  const isHomePage = location.pathname === '/home' || location.pathname === '/profile' || location.pathname === '/settings';
 
   const handleLogout = async () => {
     try {
@@ -65,6 +65,11 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
     }
   };
 
+  const handleNavigate = (path) => {
+    navigate(path);
+    if (isMobile) setIsOpen(false);
+  };
+
   if (!isLoggedIn || !isHomePage) {
     return null;
   }
@@ -91,7 +96,9 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
         <div className="p-4 space-y-4">
           {/* App logo/title */}
           <div className="flex items-center justify-center p-2 mb-6">
-            <h1 className="text-2xl font-bold text-purple-400">Notes App</h1>
+            <Link to="/home" className="flex items-center">
+              <Logo />
+            </Link>
           </div>
 
           {/* Search input */}
@@ -109,11 +116,7 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
             {/* Notes Tab */}
             <button
               onClick={() => handleTabChange("notes")}
-              className={`w-full text-left px-4 py-3 rounded-lg flex items-center transition-colors ${
-                activeTab === "notes"
-                  ? "bg-purple-800 text-white"
-                  : "bg-gray-900 text-gray-300 hover:bg-gray-800"
-              }`}
+              className={`w-full text-left px-4 py-3 rounded-lg flex items-center transition-colors ${activeTab === "notes" ? "bg-purple-800 text-white" : "bg-gray-900 text-gray-300 hover:bg-gray-800"}`}
             >
               <FileText size={18} className="mr-3" />
               Notes
@@ -122,11 +125,7 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
             {/* Archived Tab */}
             <button
               onClick={() => handleTabChange("archived")}
-              className={`w-full text-left px-4 py-3 rounded-lg flex items-center transition-colors ${
-                activeTab === "archived"
-                  ? "bg-purple-800 text-white"
-                  : "bg-gray-900 text-gray-300 hover:bg-gray-800"
-              }`}
+              className={`w-full text-left px-4 py-3 rounded-lg flex items-center transition-colors ${activeTab === "archived" ? "bg-purple-800 text-white" : "bg-gray-900 text-gray-300 hover:bg-gray-800"}`}
             >
               <Archive size={18} className="mr-3" />
               Archived
@@ -136,7 +135,7 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
           <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2 border-t border-purple-900 bg-gray-950">
             {/* Settings */}
             <button
-              onClick={() => console.log('Settings clicked')}
+              onClick={() => handleNavigate('/settings')}
               className="w-full text-left px-4 py-3 bg-gray-900 text-gray-300 rounded-lg hover:bg-gray-800 flex items-center transition-colors"
             >
               <Settings size={18} className="mr-3" />
@@ -145,7 +144,7 @@ const NavBar = ({ children, onSearch, activeTab, setActiveTab }) => {
 
             {/* Profile */}
             <button
-              onClick={() => console.log('Profile clicked')}
+              onClick={() => handleNavigate('/profile')}
               className="w-full text-left px-4 py-3 bg-gray-900 text-gray-300 rounded-lg hover:bg-gray-800 flex items-center transition-colors"
             >
               <User size={18} className="mr-3" />

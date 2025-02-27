@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
+import Profile from "./pages/Profile/Profile";
+import Settings from "./pages/Settings/Settings";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Verifica se há um token no localStorage ao carregar
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
@@ -32,6 +33,22 @@ const App = () => {
           element={
             <PrivateRoute>
               <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <PrivateRoute>
+              <Settings />
             </PrivateRoute>
           }
         />

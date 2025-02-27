@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start:backend": "cd backend/notes_app && node server.js",
-    "start:frontend": "cd frontend/notes_app && npm run dev",
+    "start:backend": "cd backend && node server.js",
+    "start:frontend": "cd frontend && npm run dev",
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
 
   },
